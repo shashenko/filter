@@ -10,7 +10,10 @@ export default {
       type: Array,
       default: () => ([]),
     },
-    search: Boolean,
+    search: {
+      type: Boolean,
+      default: true,
+    },
     disabled: Boolean,
     placeholder: String,
   },
@@ -37,7 +40,6 @@ export default {
   },
   methods: {
     closeDropDown($event) {
-      console.log($event)
       if (!$event || !this.$el.contains($event.target)) {
         if (this.isOpen) {
           this.isOpen = false
@@ -84,6 +86,11 @@ export default {
         this.isSearchTyping = false
       }, 500)
     },
+    onClickTitle() {
+      if (!this.disabled) {
+        this.toggleDropDown()
+      }
+    },
     onClickAll() {
       if (this.selectedOptions.length === this.enabledOptions.length) {
         this.unSelectAll()
@@ -116,8 +123,8 @@ export default {
 </script>
 
 <template>
-  <div class="app-multi-select">
-    <div class="app-multi-select__title" @click="toggleDropDown">
+  <div class="app-multi-select" :class="{ 'app-multi-select--disabled': disabled }">
+    <div class="app-multi-select__title" @click="onClickTitle">
       {{ selectedOptions.length ? selectedOptions.map(option => option.label).join(', ') : placeholder }}
     </div>
     <div class="app-multi-select__dropdown" v-if="isOpen">
@@ -125,7 +132,7 @@ export default {
         <div class="app-multi-select__dropdown-action">
           <span @click="onClickAll">{{ allSelected ? 'Unselect all' : 'Select all' }}</span>
         </div>
-        <div class="app-multi-select__dropdown-search">
+        <div class="app-multi-select__dropdown-search" v-if="search">
           <input v-model="searchInput" @keyup="onSearchTyping" />
         </div>
       </div>
@@ -156,6 +163,10 @@ export default {
   position: relative;
   width: 100%;
   max-width: 260px;
+
+  &--disabled {
+    opacity: 0.5;
+  }
 
   &__title {
     border: 1px solid #ccc;
