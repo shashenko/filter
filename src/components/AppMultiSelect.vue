@@ -133,7 +133,7 @@ export default {
           <span @click="onClickAll">{{ allSelected ? 'Unselect all' : 'Select all' }}</span>
         </div>
         <div class="app-multi-select__dropdown-search" v-if="search">
-          <input v-model="searchInput" @keyup="onSearchTyping" />
+          <input placeholder="Search" v-model="searchInput" @keyup="onSearchTyping" />
         </div>
       </div>
       <div class="app-multi-select__dropdown-list">
